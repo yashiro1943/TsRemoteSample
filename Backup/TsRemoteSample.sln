@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TsRemoteSample", "TsRemoteSample\TsRemoteSample.csproj", "{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{3323F157-D8CA-46B7-BF03-F9F9D9E455D6}"
+	ProjectSection(SolutionItems) = preProject
+		lib\LJV7_IF.dll = lib\LJV7_IF.dll
+		lib\LJV7_IF.lib = lib\LJV7_IF.lib
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{49F08B07-16AE-484D-86A1-FD6360BE209D}"
+	ProjectSection(SolutionItems) = preProject
+		include\LJV7_ErrorCode.h = include\LJV7_ErrorCode.h
+		include\LJV7_IF.h = include\LJV7_IF.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Debug|x64.ActiveCfg = Debug|x64
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Debug|x64.Build.0 = Debug|x64
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Debug|x86.ActiveCfg = Debug|x86
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Debug|x86.Build.0 = Debug|x86
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Release|x64.ActiveCfg = Release|x64
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Release|x64.Build.0 = Release|x64
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Release|x86.ActiveCfg = Release|x86
+		{97CA04FE-86A3-4C1F-BB88-061A1F5360A7}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
