@@ -22,6 +22,9 @@ using ToshibaTools;
 //for OpenGL
 using SharpGL;
 
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Data.OleDb; //使用excel資料讀取須宣告
+
 namespace TsRemoteSample
 {
 
@@ -270,10 +273,6 @@ namespace TsRemoteSample
 
                 try
                 {
-
-                    
-
-
                     //TsRemote._Robot.Stop = true;
                     //MessageBox.Show(TsRemote._Robot.GetStatus().ToString());
                     if (TsRemote._Robot.GetStatus().RunStatus == 0)
@@ -1131,6 +1130,8 @@ namespace TsRemoteSample
         {
             pictureBox1.Visible = !pictureBox1.Visible;
             OpenGLCtrl_Orig.Visible = !OpenGLCtrl_Orig.Visible;
+
+            
         }
 
         private void btnRstOpenGL_Click(object sender, EventArgs e)
@@ -1368,7 +1369,8 @@ namespace TsRemoteSample
                 btnExportSTL.Visible = true;
                 btnAuto.Text = "手動模式";
                 btnAuto.BackColor = Color.Red;
-                Auto_case = "Reclaimer_Position";  //將自動模式的case設定為手臂到取料點並會開始循環
+                //Auto_case = "Reclaimer_Position";  //將自動模式的case設定為手臂到取料點並會開始循環
+                Auto_case = "Detection_Down";
                 Auto_System = 1;//將自動模式打開
 
                 //開啟雷射用Srart
@@ -1457,8 +1459,10 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
-                                    point.X = 300;
-                                    point.Y = 200;
+                                    /*point.X = 300;
+                                    point.Y = 200;*/
+                                    point.X = 200;
+                                    point.Y = -200;
                                     point.Z = 300;
                                     point.C = 0;
 
@@ -1472,8 +1476,8 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
-                                    point.X = 300;
-                                    point.Y = 200;
+                                    point.X = 200;
+                                    point.Y = -200;
                                     point.Z = 100;
                                     point.C = 0;
                                     Robot_Moves(point);
@@ -1499,8 +1503,8 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
-                                    point.X = 300;
-                                    point.Y = 200;
+                                    point.X = 200;
+                                    point.Y = -200;
                                     point.Z = 300;
                                     point.C = 0;
                                     Robot_Moves(point);
@@ -1513,8 +1517,8 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
-                                    point.X = 7;
-                                    point.Y = 266;
+                                    point.X = -86;
+                                    point.Y = -283;
                                     point.Z = 300;
                                     point.C = 0;
                                     Robot_Moves(point);
@@ -1527,9 +1531,9 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
-                                    point.X = 7;
-                                    point.Y = 266;
-                                    point.Z = 52;//小隻
+                                    point.X = -87;
+                                    point.Y = -283;
+                                    point.Z = 80;//小隻
                                     //point.Z = 25;//大隻
 
                                     //point.Z = 45;//上半部
@@ -1539,7 +1543,8 @@ namespace TsRemoteSample
                                     point.C = 0;
                                     Robot_Moves(point);
                                     //TsRemote._Robot.Moves(point);
-                                    Auto_case = "Detection_Rotation_Detect";
+                                    //Auto_case = "Detection_Rotation_Detect";
+                                    Auto_case = "1";
                                 }
                                 break;
                             }
@@ -1548,14 +1553,14 @@ namespace TsRemoteSample
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
                                     OpenGLCtrl_Orig_Auto.Tag = null;
-                                    TsRemote._Robot.SetOVRD(35);
+                                    TsRemote._Robot.SetOVRD(60);
                                     ThreeD_YorN = 0;
 
                                     try
                                     {
-                                        point.X = 7;
-                                        point.Y = 266;
-                                        point.Z = 52;//小隻
+                                        point.X = -87;
+                                        point.Y = -283;
+                                        point.Z = 80;//小隻
                                         //point.Z = 25;//大隻
 
                                         //point.Z = 45;//上半部
@@ -1637,9 +1642,9 @@ namespace TsRemoteSample
                                     point.Y = 266;
                                     point.Z = 300;
                                     point.C = 0;*/
-                                    point.X = 7;
-                                    point.Y = 266;
-                                    point.Z = 52;//小隻
+                                    point.X = -80;
+                                    point.Y = -283;
+                                    point.Z = 72;//小隻
                                     //point.Z = 25;//大隻
 
                                     //point.Z = 45;//上半部
@@ -1659,14 +1664,14 @@ namespace TsRemoteSample
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
                                     OpenGLCtrl_Orig_Auto.Tag = null;
-                                    TsRemote._Robot.SetOVRD(35);
+                                    TsRemote._Robot.SetOVRD(15);
                                     ThreeD_YorN = 0;
 
                                     try
                                     {
-                                        point.X = 7;
-                                        point.Y = 266;
-                                        point.Z = 52;//小隻
+                                        point.X = -87;
+                                        point.Y = -283;
+                                        point.Z = 80;//小隻
                                         //point.Z = 25;//大隻
 
                                         //point.Z = 45;//上半部
@@ -1724,7 +1729,7 @@ namespace TsRemoteSample
 
                                     //ModelBuilder.drawGL_FrameData_Triangle_SAVE(builder); //儲存3D影像為STL
                                     
-                                    //OOKK = 1;
+                                    
                                     Count_aa = 0;
                                     for (int aa = 0; aa < (builder2._LJV7Frame.count * builder2._LJV7Frame.LJVcount); aa++)
                                     {
@@ -1748,7 +1753,7 @@ namespace TsRemoteSample
                                         {
                                             Count_aa++;
                                         }*/
-                                        if (builder1._LJV7Frame.buffer_compute[aa] == -999)
+                                        /*if (builder1._LJV7Frame.buffer_compute[aa] == -999)
                                         {
                                             builder._LJV7Frame.buffer_compute[aa] = builder2._LJV7Frame.buffer_compute[aa];
                                         }
@@ -1770,7 +1775,7 @@ namespace TsRemoteSample
                                         }
 
                                         builder._LJV7Frame.buffer_compute[aa] = (builder1._LJV7Frame.buffer_compute[aa] + builder2._LJV7Frame.buffer_compute[aa]) / 2;
-
+                                        */
                                     }
 
                                     pictureBox_CurrentImage_Auto.Tag = builder;
@@ -1785,6 +1790,7 @@ namespace TsRemoteSample
                                     //btnShow3D_Auto.Enabled = true;
                                     //Form.CheckForIllegalCrossThreadCalls = false;
                                     ThreeD_YorN = 1;
+                                    
                                     TsRemote._Robot.SetOVRD((int)numericUpDown_Override.Value);
                                     Auto_case = "Discharge_Position";
                                 }
@@ -1796,6 +1802,8 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
+                                    //OOKK = 1;
+
                                     /*point.X = 300;
                                     point.Y = 400;
                                     point.Z = 300;
@@ -1811,8 +1819,8 @@ namespace TsRemoteSample
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
                                 {
-                                    point.X = 300;
-                                    point.Y = 400;
+                                    point.X = 200;
+                                    point.Y = -200;
                                     point.Z = 100;
                                     point.C = 0;
 
@@ -1839,9 +1847,9 @@ namespace TsRemoteSample
                         case ("Discharge_Up")://出料位置上升Discharge Up
                             {
                                 if (TsRemote._Robot.GetStatus().RunStatus == 0)//判斷手臂無動作時進入
-                                {                               
-                                    point.X = 300;
-                                    point.Y = 400;
+                                {
+                                    point.X = 200;
+                                    point.Y = -200;
                                     point.Z = 300;
                                     point.C = 0;
 
@@ -1902,5 +1910,102 @@ namespace TsRemoteSample
         {    
             OOKK = 1;
         }
+
+        public static string[] lines;
+
+        private void btn_OpenExcel_Click(object sender, EventArgs e)
+        {
+
+            openFileDialog1.Filter = "Excel Worksheets|*.csv";
+            openFileDialog1.InitialDirectory = @"C:\Users\Owner\Desktop\專案\TsRemoteSample_PH_2015.12.21\TsRemoteSample\bin\x86\Debug";
+
+            //FileMode.Create;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //GetExcelSheetNames(openFileDialog1.FileName);
+                lines = System.IO.File.ReadAllLines(openFileDialog1.FileName);
+
+            }
+            else
+            {
+                return;
+            }
+
+
+            builder._LJV7Frame.buffer_compute_Excel = new float[lines.Length * lines.Length];
+            builder._LJV7Frame.buffer_compute = new float[lines.Length * lines.Length];
+
+            double min = 99999;
+            double max = 0;
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] MachineList;
+
+                MachineList = lines[i].Split(',');
+                for (int j = 0; j < MachineList.Length; j++)
+                {
+                    builder._LJV7Frame.buffer_compute[i * MachineList.Length + j] = (float)Convert.ToDouble(MachineList[j]);
+                    builder._LJV7Frame.buffer_compute_Excel[i * MachineList.Length + j] = (float)Convert.ToDouble(MachineList[j]);
+
+                    if ((float)Convert.ToDouble(MachineList[j]) > -900)
+                    {
+                        if (min > (float)Convert.ToDouble(MachineList[j]))
+                        {
+                            //builder._LJV7Frame.Min_Buffer_Compute = (float)Convert.ToDouble(MachineList[j]);
+                            min = (float)Convert.ToDouble(MachineList[j]);
+                        }
+
+                        if (max < (float)Convert.ToDouble(MachineList[j]))
+                        {
+                            //builder._LJV7Frame.Max_Buffer_Compute = (float)Convert.ToDouble(MachineList[j]);
+                            max = (float)Convert.ToDouble(MachineList[j]);
+                        }
+                    }
+                    // builder._LJV7Frame.buffer._ShowPoints[j].X = i;
+                }
+                
+            }
+            builder._LJV7Frame.Min_Buffer_Compute_Excel = (float)min;
+            builder._LJV7Frame.Max_Buffer_Compute_Excel = (float)max;
+
+            builder.doBuild_Excel();
+            builder.doComputeMaxRadio();
+
+            //builder.doBuild_Excel();
+
+            OpenGLCtrl_Orig.Tag = builder;
+            //pictureBox_CurrentImage_Auto.Tag = builder._LJV7Frame.buffer_compute;
+
+            OOKK = 0;
+            ThreeD_YorN = 1;
+            /*Excel._Application myExcel = null;
+            Excel._Workbook myBook = null;
+            Excel._Worksheet mySheet = null;
+
+            try
+            {
+                myExcel = new Excel.Application();    //開啟一個新的應用程式
+                myExcel.DisplayAlerts = false;        //停用警告訊息
+                myBook = myExcel.Workbooks.Add(true); //新增活頁簿
+                mySheet = (Excel._Worksheet)myBook.Worksheets[1];//引用第一張工作表
+                myExcel.Visible = true;               //顯示Excel程式
+            }
+            catch (Exception)
+            {
+                myExcel.Visible = true;
+            }
+            finally
+            {
+                //把執行的Excel資源釋放
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(myExcel);
+                myExcel = null;
+                myBook = null;
+                mySheet = null;
+            }*/
+        }
+
+
+
+        
     }
 }

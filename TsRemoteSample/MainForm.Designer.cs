@@ -119,6 +119,7 @@
             this.btnChangeRange = new System.Windows.Forms.Button();
             this.maskedTextBox_RangeMin = new System.Windows.Forms.MaskedTextBox();
             this.maskedTextBox_RangeMax = new System.Windows.Forms.MaskedTextBox();
+            this.btn_OpenExcel = new System.Windows.Forms.Button();
             this.btnRstOpenGL = new System.Windows.Forms.Button();
             this.btnShow3D = new System.Windows.Forms.Button();
             this.OpenGLCtrl_Orig = new SharpGL.OpenGLCtrl();
@@ -139,6 +140,7 @@
             this.timerGetCoordinate = new System.Windows.Forms.Timer(this.components);
             this.btnCloseApp = new System.Windows.Forms.Button();
             this.timer_CurrentFPS = new System.Windows.Forms.Timer(this.components);
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this._StatusStrip.SuspendLayout();
             this.tabControl_main.SuspendLayout();
             this.tabPage_LJV7.SuspendLayout();
@@ -454,7 +456,7 @@
             this.textBox_LJV7IPAddr.Name = "textBox_LJV7IPAddr";
             this.textBox_LJV7IPAddr.Size = new System.Drawing.Size(106, 22);
             this.textBox_LJV7IPAddr.TabIndex = 80;
-            this.textBox_LJV7IPAddr.Text = "192.168.0.20";
+            this.textBox_LJV7IPAddr.Text = "192.168.0.4";
             // 
             // _lblHighSpeedStartNo
             // 
@@ -995,8 +997,8 @@
             this.panel_MouseCtrl.Size = new System.Drawing.Size(177, 197);
             this.panel_MouseCtrl.TabIndex = 36;
             this.panel_MouseCtrl.Visible = false;
-            this.panel_MouseCtrl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel_MouseCtrl_MouseMove);
             this.panel_MouseCtrl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_MouseCtrl_MouseDown);
+            this.panel_MouseCtrl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel_MouseCtrl_MouseMove);
             this.panel_MouseCtrl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel_MouseCtrl_MouseUp);
             // 
             // label_MovePos
@@ -1258,11 +1260,6 @@
             // numericUpDown_Override
             // 
             this.numericUpDown_Override.Location = new System.Drawing.Point(75, 208);
-            this.numericUpDown_Override.Maximum = new decimal(new int[] {
-            75,
-            0,
-            0,
-            0});
             this.numericUpDown_Override.Name = "numericUpDown_Override";
             this.numericUpDown_Override.Size = new System.Drawing.Size(121, 22);
             this.numericUpDown_Override.TabIndex = 24;
@@ -1293,6 +1290,7 @@
             this.tabPage_3DModel.Controls.Add(this.btnChangeRange);
             this.tabPage_3DModel.Controls.Add(this.maskedTextBox_RangeMin);
             this.tabPage_3DModel.Controls.Add(this.maskedTextBox_RangeMax);
+            this.tabPage_3DModel.Controls.Add(this.btn_OpenExcel);
             this.tabPage_3DModel.Controls.Add(this.btnRstOpenGL);
             this.tabPage_3DModel.Controls.Add(this.btnShow3D);
             this.tabPage_3DModel.Controls.Add(this.OpenGLCtrl_Orig);
@@ -1333,9 +1331,19 @@
             this.maskedTextBox_RangeMax.Size = new System.Drawing.Size(76, 22);
             this.maskedTextBox_RangeMax.TabIndex = 91;
             // 
+            // btn_OpenExcel
+            // 
+            this.btn_OpenExcel.Location = new System.Drawing.Point(225, 287);
+            this.btn_OpenExcel.Name = "btn_OpenExcel";
+            this.btn_OpenExcel.Size = new System.Drawing.Size(64, 50);
+            this.btn_OpenExcel.TabIndex = 88;
+            this.btn_OpenExcel.Text = "開Excel";
+            this.btn_OpenExcel.UseVisualStyleBackColor = true;
+            this.btn_OpenExcel.Click += new System.EventHandler(this.btn_OpenExcel_Click);
+            // 
             // btnRstOpenGL
             // 
-            this.btnRstOpenGL.Location = new System.Drawing.Point(225, 254);
+            this.btnRstOpenGL.Location = new System.Drawing.Point(225, 220);
             this.btnRstOpenGL.Name = "btnRstOpenGL";
             this.btnRstOpenGL.Size = new System.Drawing.Size(64, 50);
             this.btnRstOpenGL.TabIndex = 88;
@@ -1345,7 +1353,7 @@
             // 
             // btnShow3D
             // 
-            this.btnShow3D.Location = new System.Drawing.Point(225, 196);
+            this.btnShow3D.Location = new System.Drawing.Point(225, 149);
             this.btnShow3D.Name = "btnShow3D";
             this.btnShow3D.Size = new System.Drawing.Size(64, 50);
             this.btnShow3D.TabIndex = 84;
@@ -1557,6 +1565,10 @@
             this.timer_CurrentFPS.Interval = 1000;
             this.timer_CurrentFPS.Tick += new System.EventHandler(this.timer_CurrentFPS_Tick);
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1570,8 +1582,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "恒耀工業";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this._StatusStrip.ResumeLayout(false);
             this._StatusStrip.PerformLayout();
@@ -1731,6 +1743,8 @@
         private System.Windows.Forms.Button btnShow3D_Auto;
         private SharpGL.OpenGLCtrl OpenGLCtrl_Orig_Auto;
         private System.Windows.Forms.Button btnExportSTL;
+        private System.Windows.Forms.Button btn_OpenExcel;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

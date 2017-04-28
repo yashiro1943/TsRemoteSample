@@ -30,7 +30,7 @@ namespace PHTools
         public static System.Timers.Timer timer_CheckStop = new System.Timers.Timer();
 
         //連線設定資料
-        public static string _LJV7IP = "192.168.0.20";
+        public static string _LJV7IP = "192.168.0.4";
         public static string _LJV7CommandPort = "24691";
         public static string _LJV7HighSpeedPort = "24692";
         public static string _LJV7CallbackFrequency = "200";

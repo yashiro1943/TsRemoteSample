@@ -17,6 +17,9 @@ using PHTools;
 //for DPoint
 using ToshibaTools;
 
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Drawing;
+
 namespace TsRemoteSample
 {
     public class ModelBuilder
@@ -77,13 +80,17 @@ namespace TsRemoteSample
         private DPoint[] _ShowPoints = null;
         public uint LJVcount = FrameData_LJV7._PROFILESIZE - 7;	//800 with one laser
         public void doBuild() { doBuild(-1, -1); }
+        public void doBuild_Excel() { doBuild_Excel(-1, -1); }
+
         public int Y_Distance;
         
         public void doBuild(double range_max, double range_min)
         {
             _LJV7Frame.buffer = _BufferList.ToArray();
+
+            
             _LJV7Frame.size_per_frame = Convert.ToUInt32(_PointList.Count * _EACHSIZE);
-            //_LJV7Frame.size_per_frame = Convert.ToUInt32(700);
+            //_LJV7Frame.size_per_frame = Convert.ToUInt32(850);
             _LJV7Frame.count = _LJV7Frame.size_per_frame;
             _LJV7Frame.SetComputeBuffer();
             _LJV7Frame.DoWritePreByteFile("C:\\Users\\user\\Desktop\\3DModel.boltun", _LJV7Frame.buffer);
@@ -95,9 +102,47 @@ namespace TsRemoteSample
 
             reBuild();
         }
+
+        public void doBuild_Excel(double range_max, double range_min)
+        {
+            _LJV7Frame.buffer = new int[564900];
+            //_PointList = new List<TsPointS>();
+            _LJV7Frame.size_per_frame = Convert.ToUInt32(MainForm.lines.Length);
+            //_LJV7Frame.size_per_frame = Convert.ToUInt32(850);
+            _LJV7Frame.count = _LJV7Frame.size_per_frame;
+            _LJV7Frame.SetComputeBuffer();
+
+            _LJV7Frame.Min_Buffer_Compute= _LJV7Frame.Min_Buffer_Compute_Excel;
+            _LJV7Frame.Max_Buffer_Compute = _LJV7Frame.Max_Buffer_Compute_Excel;
+
+
+            _LJV7Frame.DoWritePreByteFile("C:\\Users\\user\\Desktop\\3DModel.boltun", _LJV7Frame.buffer);
+            //_LJV7Frame.buffer_compute = new float[_LJV7Frame.LJVcount * 700];
+            //_LJV7Frame.buffer_compute 
+            _ShowPoints = null;
+            GC.Collect();
+            _ShowPoints = new DPoint[_LJV7Frame.buffer_compute.Length];
+
+
+            for (int i = 0; i < _LJV7Frame.buffer_compute.Length; i++) _ShowPoints[i] = new DPoint();
+
+            _LJV7Frame.buffer_compute = _LJV7Frame.buffer_compute_Excel;
+            reBuildExcel();
+        }
+
+
+
         public void reBuild() { reBuild(-1, -1); }
         public void reBuild(double range_max, double range_min) {
             reBuild_MoveObject(range_max, range_min); 
+            //reBuild_MoveLser(range_max, range_min); 
+        }
+
+
+        public void reBuildExcel() { reBuildExcel(-1, -1); }
+        public void reBuildExcel(double range_max, double range_min)
+        {
+            reBuild_Excel(range_max, range_min);
             //reBuild_MoveLser(range_max, range_min); 
         }
 
@@ -132,10 +177,15 @@ namespace TsRemoteSample
         {
             if (_LJV7Frame.buffer == null || _LJV7Frame.buffer_compute == null || _ShowPoints == null) return;
             
-            Console.WriteLine("build: r=" + _Radio + ", angle=" + StartPoint.C + ", center=(" + center.X + ", " + center.Y + ")");
+            //Console.WriteLine("build: r=" + _Radio + ", angle=" + StartPoint.C + ", center=(" + center.X + ", " + center.Y + ")");
 
             double Y_Conversion = Distance_Conversion(Y_Distance);
-            
+            //double Y_Conversion = (double)Y_Distance/200;
+            if (Y_Conversion < 0)
+            {
+                Y_Conversion = -Y_Conversion;
+            }
+
             double diff = _LJV7Frame.Max_Buffer_Compute - _LJV7Frame.Min_Buffer_Compute;
             if (range_max > 0 && range_min > 0) diff = range_max - range_min;
             else
@@ -158,7 +208,7 @@ namespace TsRemoteSample
                 for (int j = 0; j < _LJV7Frame.LJVcount; j++)
                 {
                     int pos = Convert.ToInt32(i * _LJV7Frame.LJVcount + j);
-                    _ShowPoints[pos].C = arc;
+
 
                     if (_LJV7Frame.buffer_compute[pos] == -999 || _LJV7Frame.buffer_compute[pos] < range_min || _LJV7Frame.buffer_compute[pos] > range_max)
                     {
@@ -171,8 +221,8 @@ namespace TsRemoteSample
                     GLDrawObject.HsvToRgb(Color_H, 1.0, 1.0, out _ShowPoints[pos].r, out _ShowPoints[pos].g, out _ShowPoints[pos].b);
 
                     //對應到新座標: 拉平座標(實際接收資料)
-                    //_ShowPoints[pos].X = (Convert.ToDouble(i)) / Convert.ToDouble(100);
-                    //_ShowPoints[pos].Z = _Radio - fr_LJV7Frameame.buffer_compute[pos];
+                    /*_ShowPoints[pos].X = (Convert.ToDouble(i)) / Convert.ToDouble(100);
+                    _ShowPoints[pos].Z = _Radio - _LJV7Frame.buffer_compute[pos];*/
                     if (_LJV7Frame.buffer_compute[pos] < min_distance) min_distance = _LJV7Frame.buffer_compute[pos];
 
                     //對應到新座標: 對應回現實座標
@@ -189,11 +239,24 @@ namespace TsRemoteSample
                      * _ShowPoints[pos].Y = ((_LJV7Frame.LJVcount / 2.0 - Convert.ToDouble(j)) / Convert.ToDouble(70)) + 2;
                      */
 
-                    _ShowPoints[pos].X = (Normalization(_LJV7Frame.buffer_compute[pos])) * Math.Cos(arc);
-                    _ShowPoints[pos].Z = (Normalization(_LJV7Frame.buffer_compute[pos])) * Math.Sin(arc);
-                    _ShowPoints[pos].Y = ((_LJV7Frame.LJVcount / Y_Conversion - Convert.ToDouble(j)) / Convert.ToDouble(100));
-                    //_ShowPoints[pos].Y = ((_LJV7Frame.LJVcount / 2.0 - Convert.ToDouble(j)) / Convert.ToDouble(70)) + 2;
-                     
+
+                    
+
+                    _ShowPoints[pos].X = (Convert.ToDouble(i)) / Convert.ToDouble(250);
+                    //_ShowPoints[pos].Z = (_Radio - _LJV7Frame.buffer_compute[pos]) - 800; // Convert.ToDouble(10);
+
+                    _ShowPoints[pos].Z = ((_LJV7Frame.buffer_compute[pos])-55); // Convert.ToDouble(10);
+
+                    /*_ShowPoints[pos].X = (Normalization(_LJV7Frame.buffer_compute[pos])) * Math.Cos(arc);
+                    _ShowPoints[pos].Z = (Normalization(_LJV7Frame.buffer_compute[pos])) * Math.Sin(arc);*/
+                    _ShowPoints[pos].Y = ((_LJV7Frame.LJVcount / 2.0 - Convert.ToDouble(j))/ Convert.ToDouble(100));
+                    if (i == 80)
+                    {
+                        ;
+                    }
+                    //_ShowPoints[pos].Y = ((_LJV7Frame.LJVcount / 2.0 - (Convert.ToDouble(j)+2)) / Convert.ToDouble(100)) - 2;
+                    //_ShowPoints[pos].Y = (_LJV7Frame.buffer_compute[pos] - _LJV7Frame.Min_Buffer_Compute) * 8;
+                    //_ShowPoints[pos].Y = (_LJV7Frame.LJVcount/ Convert.ToDouble(400));
 
 
                     /*_ShowPoints[pos].X = (i/15);
@@ -206,9 +269,67 @@ namespace TsRemoteSample
                     startp = point;
                 }
             }
+
+            SaveComputeDataToCSV();
             //Console.WriteLine("Max Distance = " + min_distance);
         }
         #endregion
+
+
+        public void reBuild_Excel(double range_max, double range_min)
+        {
+
+            //double diff = _LJV7Frame.Max_Buffer_Compute - _LJV7Frame.Min_Buffer_Compute;
+
+            double diff = 3.35440063;
+
+            //double diff = _LJV7Frame.Max_Buffer_Compute - _LJV7Frame.Min_Buffer_Compute;
+            if (range_max > 0 && range_min > 0)
+            {
+                diff = range_max - range_min;
+            }
+            else
+            {
+                range_max = _LJV7Frame.Max_Buffer_Compute;
+                range_min = _LJV7Frame.Min_Buffer_Compute;
+                diff = _LJV7Frame.Max_Buffer_Compute - _LJV7Frame.Min_Buffer_Compute;
+            }
+
+            //TsPointS startp = StartPoint;
+            for (int i = 0, k = 0; i < _LJV7Frame.size_per_frame; i++, k++)
+            {
+                //TsPointS point = _PointList[i / _EACHSIZE];
+                //Console.WriteLine("Angle=" + (startp.C + diffAngle * k));
+                //double arc = DPoint.Angle2Arc(startp.C + ((point.C - startp.C) / _EACHSIZE) * k);
+
+                for (int j = 0; j < _LJV7Frame.LJVcount; j++)
+                {
+                    int pos = Convert.ToInt32(i * _LJV7Frame.LJVcount + j);
+
+                    //_ShowPoints[pos].C = arc;
+
+                    if (_LJV7Frame.buffer_compute[pos] == -999 || _LJV7Frame.buffer_compute[pos] < range_min || _LJV7Frame.buffer_compute[pos] > range_max)
+                    {
+                        _ShowPoints[pos].X = _ShowPoints[pos].Y = _ShowPoints[pos].Z = -999;
+                        continue;
+                    }
+
+
+                    double Color_H = (_LJV7Frame.buffer_compute[pos] - range_min) / diff;
+                    Color_H = Color_H * (GLDrawObject.MaxColorH - GLDrawObject.MinColorH) + GLDrawObject.MinColorH;
+                    GLDrawObject.HsvToRgb(Color_H, 1.0, 1.0, out _ShowPoints[pos].r, out _ShowPoints[pos].g, out _ShowPoints[pos].b);
+
+                    _ShowPoints[pos].X = (Convert.ToDouble(i)) / Convert.ToDouble(250);
+                    _ShowPoints[pos].Z = (_LJV7Frame.buffer_compute[pos])-55; // Convert.ToDouble(10);
+
+                    /*_ShowPoints[pos].X = (Normalization(_LJV7Frame.buffer_compute[pos])) * Math.Cos(arc);
+                    _ShowPoints[pos].Z = (Normalization(_LJV7Frame.buffer_compute[pos])) * Math.Sin(arc);*/
+                    _ShowPoints[pos].Y = ((_LJV7Frame.LJVcount / 2.0 - Convert.ToDouble(j)) / Convert.ToDouble(100));
+                }
+            }
+
+            //SaveComputeDataToCSV();
+        }
 
         #region With Move Laser
         public void reBuild_MoveLser(double range_max, double range_min)
@@ -727,6 +848,33 @@ namespace TsRemoteSample
         private double Calculate_Ratio(double Distance)//依最小值算出物件直徑為多少
         {
             return ((Distance * 12.07914973) - 615.1213363);
+        }
+
+
+
+        private void SaveComputeDataToCSV()
+        {
+            if (_LJV7Frame.buffer_compute == null) return;
+
+            FileStream fs = new FileStream("LaserData" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv", FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+            for (int i = 0; i < _LJV7Frame.size_per_frame; i++)
+            {
+                string StrData = "";
+                for (int j = 0; j < _LJV7Frame.LJVcount; j++)
+                {
+                    StrData += _LJV7Frame.buffer_compute[i * _LJV7Frame.LJVcount + j].ToString() + ",";
+                }
+                if (StrData.Length > 0) StrData = StrData.Substring(0, StrData.Length - 1);
+                sw.WriteLine(StrData);
+            }
+            //清空暫存
+            sw.Flush();
+            //關閉檔案
+            sw.Close();
+            fs.Close();
+            ////
+
         }
 
     }

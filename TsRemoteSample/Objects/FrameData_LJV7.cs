@@ -38,12 +38,17 @@ namespace KeyenceTools
 		
 		//buffer_compute的size = LJVcount*size_per_frame
         public float[] buffer_compute = null;
-		public uint LJVcount = 0;				    //800 with one laser
+        public float[] buffer_compute_Excel = null;
+        public uint LJVcount = 0;				    //800 with one laser
         public uint size_per_frame = _COMPUTESIZE;	//default: COMPUTESIZE(700)
 
         //全區最大最小值
         public float Max_Buffer_Compute = -999;
         public float Min_Buffer_Compute = 999;
+
+        public float Max_Buffer_Compute_Excel = -999;
+        public float Min_Buffer_Compute_Excel = 999;
+        
         #endregion
 
         //只需要中間穩定的COMPUTESIZE組數
@@ -68,7 +73,7 @@ namespace KeyenceTools
                     if (i * _PROFILESIZE + 6 + j >= buffer.Length)
                     {
                         //error
-                        Console.WriteLine(DateTime.Now.TimeOfDay + ": Error: buffer size error");
+                        //Console.WriteLine(DateTime.Now.TimeOfDay + ": Error: buffer size error");
                         //MessageBox.Show(string.Format("Error: buffer size error"), "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
